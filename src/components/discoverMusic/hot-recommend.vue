@@ -13,8 +13,7 @@
             <ul>
                 <li v-for="(item,index) in hotRecom" :key="item.id" @click="gotoDetail">
                     <span v-if="index < 8">
-                       <router-link to="/songlistDetail/">
-                             {{item.id}}
+                       <router-link :to="{path: '/listDetail', query: {songId: item.id}}">
                             <img :src="item.picUrl"  alt="">
                        </router-link>
                         <span class="play-count">
@@ -27,7 +26,7 @@
                     </span>
                 </li>        
             </ul>
-        </div>  
+        </div>
     </div>
 </template>
 <script>
@@ -37,9 +36,11 @@ export default {
           hotRecom: []
        }
     },
+    components: {
+    },
     created() {
         let that = this
-        this.$http('http://120.79.162.149:3000/personalized')
+        this.$http('static/personalized.json')
         .then(function(data) {
             console.log(data)
             that.hotRecom = data.data.result
@@ -65,6 +66,8 @@ export default {
             }
         },
         gotoDetail() {
+            // alert(1)
+           // this.$router.push({name: 'songlistDetail', params: {a: 1, b: 2}})
         }
     }
 }

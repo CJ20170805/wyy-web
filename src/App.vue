@@ -1,16 +1,15 @@
 <template>
   <div id="app">
-    <router-view/>
-    <hotRecommend></hotRecommend>
+    <headerNav></headerNav>
+    <router-view></router-view>
   </div>
 </template>
-
 <script>
-import hotRecommend from './components/hot-recommend'
+import headerNav from './components/header-nav'
 export default {
   name: 'App',
   components: {
-    hotRecommend
+    headerNav
   }
 }
 </script>
@@ -23,6 +22,7 @@ body,html{
 }
 a{
   text-decoration: none;
+  display: block;
 }
 li{
   list-style: none;
