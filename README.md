@@ -1,6 +1,6 @@
 # wyy-web
 
-> A Vue.js project
+> A Vue.js project by Cj
 
 ## Build Setup
 
