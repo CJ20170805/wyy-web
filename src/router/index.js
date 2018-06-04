@@ -8,6 +8,7 @@ import listDetail from '../components/listDetail/listDetail'
 
 Vue.use(Router)
 
+// http: //120.79.162.149:3000
 export default new Router({
   mode: 'history',
   routes: [
