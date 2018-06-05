@@ -14,7 +14,7 @@
                 <li v-for="(item,index) in hotRecom" :key="item.id" @click="gotoDetail">
                     <span v-if="index < 8">
                        <router-link :to="{path: '/listDetail', query: {songId: item.id}}">
-                            <img :src="item.picUrl"  alt="">
+                            <img :src="item.picUrl"  :title="item.name">
                        </router-link>
                         <span class="play-count">
                             {{ countSwitch(item.playCount) }} 
@@ -40,7 +40,7 @@ export default {
     },
     created() {
         let that = this
-        this.$http('static/personalized.json')
+        this.$http('http://120.79.162.149:3000/personalized')
         .then(function(data) {
             console.log(data)
             that.hotRecom = data.data.result
