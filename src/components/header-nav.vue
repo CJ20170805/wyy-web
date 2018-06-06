@@ -1,7 +1,6 @@
 <template>
   <div class="hello">
         <div class="nav-top">
-        <div class="line"></div>
         <el-menu
           :default-active="activeIndex2"
           class="el-menu-demo"
@@ -39,4 +38,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less">
+.nav-top{
+    ul{
+      padding-left: 32%;
+    }
+}
 </style>
