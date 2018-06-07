@@ -1,57 +1,56 @@
 <template>
-    <div id="listDetail" ref="abc">
+    <div id="listDetail">
         <div class="block-left">
-                <div class="list-top">
-                    <div class="songlist-pic">
-                        <img :src="songList.coverImgUrl" width="208px" height="208px">
+            <div class="list-top">
+                <div class="songlist-pic">
+                    <img :src="songList.coverImgUrl" width="208px" height="208px">
+                </div>
+                <div class="songlist-desc">
+                    <div class="desc-1">   
+                        <i class="songlist-icon"></i>
+                        <span>{{songList.name}}</span>
                     </div>
-                    <div class="songlist-desc">
-                        <div class="desc-1">   
-                            <i class="songlist-icon"></i>
-                            <span>{{songList.name}}</span>
-                        </div>
-                        <div class="desc-2">
-                            <img :src="songList.creator.avatarUrl" width="35px" height="35px">
-                            <span class="user-name">{{songList.creator.nickname}}</span>
-                            <i class="user-sign"></i>
-                            <span class="created-date">{{dateToString(songList.createTime)}}</span>
-                            <span class="created-date">创建</span>
-                        </div>
-                        <div class="desc-3">
-                            <span class="play">   
-                            播放
-                        </span>
+                    <div class="desc-2" v-if="songList.creator">
+                        <img :src="songList.creator.avatarUrl" width="35px" height="35px">
+                        <span class="user-name">{{songList.creator.nickname}}</span>
+                        <i class="user-sign"></i>
+                        <span class="created-date">{{dateToString(songList.createTime)}}</span>
+                        <span class="created-date">创建</span>
+                    </div>
+                    <div class="desc-3">
+                        <span class="play">   
+                        播放
+                       </span>
                         <span class="add-play">
                         </span>
-                            <span class="collect">({{toTenthous(songList.subscribedCount)}})</span>
-                            <span class="share">({{songList.shareCount}})</span>
-                            <span class="download">下载</span>
-                            <span class="comment">({{songList.commentCount}})</span>
-                        </div>
-                        <div class="desc-4" >
-                            <span>标签： </span>
-                            <dl class="tags">
-                                <dd v-for="item in songList.tags" :key='item'>{{item}}</dd>
-                            </dl>
-                        </div>
-                        <div class="desc-5">    
-                           <span class="d5-title">
-                              介绍：     <span class="d5-content">{{songList.description}}</span>  
-                                        </span>   
-                            <span class="unfold">展开</span>
-    
-                        </div>
+                        <span class="collect">({{toTenthous(songList.subscribedCount)}})</span>
+                        <span class="share">({{songList.shareCount}})</span>
+                        <span class="download">下载</span>
+                        <span class="comment">({{songList.commentCount}})</span>
+                    </div>
+                    <div class="desc-4" >
+                        <span>标签： </span>
+                        <dl class="tags">
+                            <dd v-for="item in songList.tags" :key='item'>{{item}}</dd>
+                        </dl>
+                    </div>
+                    <div class="desc-5">    
+                        <span class="d5-title">
+                            介绍：   <span class="d5-content">{{songList.description}}</span>  
+                                    </span>   
+                        <span class="unfold">展开</span>
+
                     </div>
                 </div>
+            </div>
             <div class="list-main">
                 <div class="list-main-top">
                      <span class="main-tit">歌曲列表</span>
                      <span class="main-songscount">{{songList.trackCount}}首歌</span>
                      <span class="main-playcount">播放：<span>{{songList.playCount}}</span> 次</span>
-                     <span class="main-outhref"><i></i>生成外链播放器</span>
-                 
+                     <span class="main-outhref"><i></i>生成外链播放器</span>       
                 </div>
-                <div class="list-main-content">
+                <div class="list-main-content" >
                     <div class="list-main-tit">
                         <span class="tit-1"></span>
                         <span class="tit-3">歌曲标题</span>
@@ -60,8 +59,7 @@
                         <span class="tit-5">专辑</span>
                     </div>
                     <dl>
-                        <dd  v-for="(item,index) in songList.tracks" @click="changeColor()" :key="item.id" >
-                            <!-- {{changeColor()}} -->
+                        <dd :class="index % 2 === 0 ? Ddbgc : ''"  v-for="(item,index) in songList.tracks"  :key="item.id">
                             <span class="song-index">{{index + 1}}</span>
                             <span class="song-btn"></span>
                             <span class="song-name">   
@@ -75,6 +73,7 @@
                     </dl>
                 </div>
             </div>
+            <comment :songListId = 'songId'  :commentCount = 'songList.commentCount'></comment>
         </div>
         <div class="block-right">
  
@@ -82,21 +81,24 @@
     </div>
 </template>
 <script>
+import comment from '../comment/comment'
 export default {
     data() {
         return {
            songId: '',
            songList: {},
-           listUrl: ''
+           listUrl: '',
+           Ddbgc: 'grayBgc'
         }
     },
+    components: {
+        comment
+    },
     mounted() {
-         console.log(this.$refs.abc)
     },
     created() {
         let that = this
         this.songId = this.$route.query.songId
-        this.listUrl = this.$route.query.listUrl
         this.$http('http://120.79.162.149:3000/playlist/detail?id=' + this.songId)
         .then(function(result) {
            if (result.data.code === 200) {
@@ -142,9 +144,10 @@ export default {
             }
             return m2 + ':' + s2
         },
-        changeColor() {
-
+        changeColor(index) {
         }
+    },
+    computed: {
     }
 }
 </script>
@@ -152,10 +155,11 @@ export default {
  #listDetail{
      width: 980px;
      margin: 0 auto;
+    .grayBgc{background-color: #f7f7f7}
     .block-left{
         float: left;
         width: 640px;
-       padding: 40px 40px 20px 30px;
+        padding: 40px 40px 20px 30px;
         .list-top{
             width: 640px;
             min-height: 233px;
@@ -384,7 +388,7 @@ export default {
                     }
                 }
             }
-        }
+            }
             .list-main-content{
                  .list-main-tit{
                      height: 34px;
@@ -410,9 +414,11 @@ export default {
                 border: 1px solid #d9d9d9;
                 border-top: 2px solid rgb(194, 12, 12);
                 dl{
+                     margin: 0;
+                     margin-top: -2px;
                     dd{
                         height: 30px;
-                        margin-left: 20px;
+                        margin-left: 0px;
                         line-height: 30px;
                         font-size: 13px;
                         span{
@@ -423,7 +429,8 @@ export default {
                             white-space: nowrap;
                         }
                         .song-index{
-                            width: 30px;             
+                            width: 40px;  
+                            text-align: center;           
                         }
                         .song-btn{
                             width: 17px;
@@ -449,7 +456,7 @@ export default {
                         .song-album{width: 110px;float: left;margin-left: 40px}
                     }
                 }
-            }
+        }
     }
     .block-right{
         width: 270px;
