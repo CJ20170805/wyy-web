@@ -20,7 +20,7 @@
                     <span class="com-num">140</span>
                 </div>
             </div>
-            <div class="comment-list">
+            <div class="comment-list" v-if="commentList.hotComments[0]">
                 <div class="list-title">
                     <span>精彩评论</span>
                 </div>
@@ -28,14 +28,46 @@
                     <dl>
                         <dd v-for="item in commentList.hotComments" :key="item.userId">
                             <span class="user-icon"><img :src="item.user.avatarUrl" alt="" width="50px" height="50px"></span>
-                            <p class="comm-content">
-                                <span>{{item.user.nickname}}</span>:
-                                {{item.content}}
-                            </p>
-                            <span class="comm-handle">
-                                <span class="handle-time">{{toStandard(item.time)}}</span>
-                                <span></span>
+                            <p class="comm-content"> 
+                                <i class="comm-username">{{item.user.nickname}}</i>:
+                                 {{filterN(item.content)}}
+                                <span class="comm-handle">
+                                    <span class="handle-time">{{toStandard(item.time)}}</span>
+                                    <span class="handle-like">
+                                        <i @mouseover= 'likeOver' @mouseout= 'likeOut'></i>
+                                        <span :class="underL">({{item.likedCount}})</span>
+                                    </span>
+                                    <span class="comm-line">|</span>
+                                    <span class="comm-reply">回复</span>
+                                 </span>    
+                            </p>     
+                         </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="comment-list comment-new">
+                <div class="list-title">
+                    <span>最新评论({{commentList.total}})</span>
+                </div>
+                <div class="list-content">
+                    <dl>
+                        <dd v-for="item in commentList.comments" :key="item.userId">
+                            <span class="user-icon">
+                                <img :src="item.user.avatarUrl" alt="" width="50px" height="50px">
                             </span>
+                            <p class="comm-content"> 
+                                <i class="comm-username">{{item.user.nickname}}</i>:
+                                 {{filterN(item.content)}}
+                                <span class="comm-handle">
+                                    <span class="handle-time">{{toStandard(item.time)}}</span>
+                                    <span class="handle-like">
+                                        <i @mouseover= 'likeOver' @mouseout= 'likeOut'></i>
+                                        <span :class="underL">({{item.likedCount}})</span>
+                                    </span>
+                                    <span class="comm-line">|</span>
+                                    <span class="comm-reply">回复</span>
+                                 </span>    
+                            </p>     
                          </dd>
                     </dl>
                 </div>
@@ -48,7 +80,8 @@ export default {
     props: ['songListId', 'commentCount'],
     data() {
         return {
-           commentList: {}
+           commentList: {},
+           underL: ''
         }
     },
     created() {
@@ -72,17 +105,32 @@ export default {
             let eh = Math.floor(h % 24) + 8
             let em = Math.floor(m % 60)
             if (eh < 10) {
-                eh = "0" + eh
+                eh = '0' + eh
             }
             if (em < 10) {
-                em = "0" + em
+                em = '0' + em
             } 
             return eh + ':' + em
+        },
+        likeOver() {
+            this.underL = 'addLine'
+        },
+        likeOut() {
+             this.underL = ''
+        },
+        filterN(text) {
+           // const arr = []
+            // for (let i = 0; i < text.length; i++) {
+            //     arr.push(text[i])
+            // }
+           let t2 = text.replace('/n', '<br>')
+          return t2
         }
     }
 }
 </script>
 <style lang="less">
+   .addLine{text-decoration: underline} 
    .comment{
         .comment-block{
             margin-top: 40px;
@@ -173,30 +221,57 @@ export default {
                   dl{
                       dd{
                         margin: 0;
-                        position: relative;
+                        border-bottom: 1px dashed #d9d9d9;
                         span{display:inline-block;}
                         .user-icon{
                             float: left;
                             margin-right: 12px;
                         }
                         .comm-content{
-                            font-size: 13px;
+                            font-size: 12px;
                             text-align: left;
-                            span{
+                            padding-left: 50px;
+                            .comm-username{
                                 color: #0c73c2;
                                 font-size: 14px;
+                                font-style: normal;
                             }
-                        }
-                        .comm-handle{
-                            display: block;
-                            .handle-time{
-                                float: left;
-                                padding-left: 0px;
-                                font-size: 13px;
-                                color: #999999;
-                                position: absolute;
-                                bottom: 4px;
-                                left: 60px;
+                            .comm-username{
+                                width: 60px;
+                                height: 16px;
+                            }
+                            .comm-handle{
+                                margin-top: 14px;
+                                width: 570px;
+                                height: 16px;
+                                .handle-time{
+                                    width: 40px;
+                                    padding-left: 0px;
+                                    font-size: 13px;
+                                    color: #999999;
+                                }
+                                .handle-like{
+                                    i{
+                                        display: inline-block;
+                                        width: 15px;
+                                        height: 14px;
+                                        background: url('../../assets/img/icon2.png') no-repeat;
+                                        background-position: -150px 0;
+                                        vertical-align: top;
+                                        margin-left: 420px;
+                                    }
+                                    i:hover{ 
+                                         background-position: -150px -20px;
+                                         }
+                                    span{
+                                        font-size: 13px;
+                                    }
+                                    span:hover{
+                                        text-decoration: underline;
+                                    }
+                                }
+                                .comm-line{margin:0 8px;}
+                                .comm-reply:hover{text-decoration: underline;}
                             }
                         }
                       }

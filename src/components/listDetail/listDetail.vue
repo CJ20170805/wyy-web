@@ -1,5 +1,6 @@
 <template>
     <div id="listDetail">
+        <playbar class="playbar"></playbar>
         <div class="block-left">
             <div class="list-top">
                 <div class="songlist-pic">
@@ -82,6 +83,7 @@
 </template>
 <script>
 import comment from '../comment/comment'
+import playbar from '../playbar/playbar'
 export default {
     data() {
         return {
@@ -92,7 +94,8 @@ export default {
         }
     },
     components: {
-        comment
+        comment,
+        playbar
     },
     mounted() {
     },
@@ -155,6 +158,7 @@ export default {
  #listDetail{
      width: 980px;
      margin: 0 auto;
+     .playbar{position: fixed;bottom: 0;left: 0;}
     .grayBgc{background-color: #f7f7f7}
     .block-left{
         float: left;
